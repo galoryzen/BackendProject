@@ -1,8 +1,7 @@
-### Project made for the course "Backend development" at Universidad del Norte
-
+# Delivery App
 ## Description
 
-This project is an application that functions similar to most delivery applications. It is made with Node, Typescript, Express, Docker, MongoDB, etc.
+Project made for the course "Backend development" at Universidad del Norte. It's an application that functions similar to most delivery applications. It is made with Node, Typescript, Express, Docker, MongoDB, etc.
 
 ## Installation 
 

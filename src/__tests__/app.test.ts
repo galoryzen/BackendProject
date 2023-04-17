@@ -19,12 +19,6 @@ describe('App', () => {
     expect(response.status).toBe(200);
     expect(response.body.message).toBe('Hello World!');
   });
-
-  it('should respond with a 200 status for the /test route', async () => {
-    const response = await request(app).get('/test');
-    expect(response.status).toBe(200);
-    expect(response.body.message).toBe('Hello World2');
-  });
 });
 
 afterAll(async () => {

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createUser, getUser, getAllUsers, updateUser, deleteUser } from '../controllers/userController';
+import { createUser, getUser, getAllUsers, updateUser, deleteUser, deleteAllUsers } from '../controllers/userController';
 import { Type, Static } from '@sinclair/typebox';
 import { validateRequest } from 'typebox-express-middleware';
 
@@ -40,5 +40,7 @@ router.delete('/:id', validateRequest({
         id: Type.String(),
     }),
 }), deleteUser);
+
+router.get('/deleteAll', deleteAllUsers);
 
 export default router;

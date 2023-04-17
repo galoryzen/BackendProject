@@ -98,3 +98,12 @@ export async function deleteUser(req: Request, res: Response) {
         res.status(500).send({ error: error.message });
     }
 }
+
+export async function deleteAllUsers(req: Request, res: Response) {
+    try {
+        await User.deleteMany({});
+        res.send({ message: 'Database cleared' });
+    } catch (error: any) {
+        res.status(500).send({ error: error.message });
+    }
+}

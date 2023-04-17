@@ -5,12 +5,16 @@
         "outDir": "./dist",
         "strict": true,
         "esModuleInterop": true,
-        "types": ["jest", "node"],
+        "types": [
+            "jest",
+            "node"
+        ],
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true
     },
     "include": [
-        "src/**/*.ts"
+        "src/**/*.ts",
+        "user.test.ts"
     ],
     "exclude": [
         "node_modules"

@@ -10,13 +10,13 @@ services:
     ports:
       - "27017:27017"
 
-  app:
-    build: .
-    container_name: app_container
-    depends_on:
-      - mongodb
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/app
-      - /app/node_modules
+  # app:
+  #   build: .
+  #   container_name: app_container
+  #   depends_on:
+  #     - mongodb
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules

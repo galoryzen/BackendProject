@@ -1,31 +1,26 @@
+// index.ts
 import express from 'express';
 import { Request, Response, NextFunction } from 'express';
-import { connectDB } from './db';
 import userRoutes from './routes/userRoutes';
 import testingRoutes from './routes/testingRoutes';
 import { TypeboxError } from 'typebox-express-middleware';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-connectDB();
 
 app.use(express.json());
 app.use('/user', userRoutes);
 app.use('/testing', testingRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Hello, TypeScript and Express!');
+  res.status(200).json({ message: 'Hello World!' });
 });
 
 app.use((error: Error | TypeboxError, req: Request, res: Response, next: NextFunction) => {
-  if(error instanceof TypeboxError) {
+  if (error instanceof TypeboxError) {
     return res.status(400).json(error);
   } else {
     return res.status(500).json(error);
   }
-})
-
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+export default app;

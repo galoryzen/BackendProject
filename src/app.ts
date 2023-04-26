@@ -17,10 +17,6 @@ app.get('/', (req, res) => {
   res.status(200).json({ message: 'Hello World!' });
 });
 
-app.get('/test' , (req, res) => {
-  res.status(200).json({ message: 'Hello World2' });
-});
-
 app.use((error: Error | TypeboxError, req: Request, res: Response, next: NextFunction) => {
   if (error instanceof TypeboxError) {
     return res.status(400).json(error);

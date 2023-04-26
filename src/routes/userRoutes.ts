@@ -22,10 +22,14 @@ router.post('/', validateRequest({
         password: Type.String(),
         cellphone: Type.Number(),
         address: Type.String(),
+        role: Type.Optional(Type.String()),
     }),
 }), createUser);
 
 router.patch('/:id', validateRequest({
+    params: Type.Object({
+        id: Type.String(),
+    }),
     body: Type.Object({
         email: Type.Optional(Type.String()),
         name: Type.Optional(Type.String()),

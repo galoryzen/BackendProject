@@ -13,8 +13,10 @@ export async function createRestaurant(req: Request, res: Response) {
 }
 
 export async function getRestaurant(req: Request, res: Response) {
-    try{
-        throw new Error('Sin implementar');
+    try {
+        const { name, category } = req.query;
+        const restaurants = await Restaurant.find({ name: name, category: category });
+        res.send(restaurants);
     } catch (error: any) {
         res.status(500).send({ error: error.message });
     }
@@ -30,7 +32,7 @@ export async function getAllRestaurants(req: Request, res: Response) {
 }
 
 export async function updateRestaurant(req: Request, res: Response) {
-    try{
+    try {
         throw new Error('Sin implementar');
     } catch (error: any) {
         res.status(500).send({ error: error.message });
@@ -38,7 +40,7 @@ export async function updateRestaurant(req: Request, res: Response) {
 }
 
 export async function deleteRestaurant(req: Request, res: Response) {
-    try{
+    try {
         throw new Error('Sin implementar');
     } catch (error: any) {
         res.status(500).send({ error: error.message });

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import statusFilterPlugin from "../statusFilterPlugin";
 
 const orderSchema = new mongoose.Schema(
     {
@@ -22,4 +23,5 @@ const orderSchema = new mongoose.Schema(
     }
 );
 
+orderSchema.plugin(statusFilterPlugin);
 export const Order = mongoose.model("Order", orderSchema);

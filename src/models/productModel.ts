@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import statusFilterPlugin from "../statusFilterPlugin";
 
 const productSchema = new mongoose.Schema(
     {
@@ -14,4 +15,5 @@ const productSchema = new mongoose.Schema(
     }
 );
 
+productSchema.plugin(statusFilterPlugin);
 export const Product = mongoose.model("Product", productSchema);

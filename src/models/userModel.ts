@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import statusFilterPlugin from '../statusFilterPlugin';
 
 const userSchema = new mongoose.Schema(
   {
@@ -16,4 +17,5 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+userSchema.plugin(statusFilterPlugin);
 export const User = mongoose.model('User', userSchema);

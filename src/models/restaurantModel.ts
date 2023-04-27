@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import statusFilterPlugin from '../statusFilterPlugin';
 
 const restaurantSchema = new mongoose.Schema(
   {
@@ -13,4 +14,5 @@ const restaurantSchema = new mongoose.Schema(
   }
 );
 
+restaurantSchema.plugin(statusFilterPlugin);
 export const Restaurant = mongoose.model('Restaurant', restaurantSchema);

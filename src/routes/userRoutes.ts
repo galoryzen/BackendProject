@@ -30,13 +30,13 @@ router.patch('/:id', validateRequest({
     params: Type.Object({
         id: Type.String(),
     }),
-    body: Type.Object({
-        email: Type.Optional(Type.String()),
-        name: Type.Optional(Type.String()),
-        password: Type.Optional(Type.String()),
-        cellphone: Type.Optional(Type.Number()),
-        address: Type.Optional(Type.String()),
-    }),
+    body: Type.Partial(Type.Object({
+        email: Type.String(),
+        name: Type.String(),
+        password: Type.String(),
+        cellphone: Type.Number(),
+        address: Type.String(),
+    })),
 }), updateUser);
 
 router.delete('/:id', validateRequest({

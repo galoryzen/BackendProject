@@ -45,11 +45,14 @@ export async function getAllUsers(req: Request, res: Response) {
     }
 }
 
-//function to update user, it will update the user with the given id from params
 export async function updateUser(req: Request, res: Response) {
     try {
         const { id } = req.params;
-        
+
+        if (Object.keys(req.body).length === 0) {
+            return res.status(400).send('Body is empty');
+        }
+
         if (!mongoose.isValidObjectId(id)) {
             return res.status(404).send('Invalid user ID');
         }
@@ -66,7 +69,7 @@ export async function updateUser(req: Request, res: Response) {
             return res.status(404).send('User not found');
         }
 
-        return res.json(user);
+        return res.send(user);
     } catch (error) {
         console.error(error);
         return res.status(500).send('Internal server error');
@@ -80,8 +83,6 @@ export async function deleteUser(req: Request, res: Response) {
         if (!mongoose.isValidObjectId(id)) {
             return res.status(404).send('Invalid user ID');
         }
-
-        //Do a soft delete, just change the status to false
 
         const user = await User.findByIdAndUpdate(
             id,

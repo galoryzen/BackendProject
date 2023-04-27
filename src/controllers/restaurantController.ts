@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 
 export async function createRestaurant(req: Request, res: Response) {
     try {
-        const restaurant = new Restaurant(req.body);
+        const restaurant = new Restaurant({ ...req.body, distance: Math.floor(Math.random() * 1000) });
         await restaurant.save();
         res.status(201).send(restaurant);
     } catch (error: any) {
@@ -15,16 +15,9 @@ export async function createRestaurant(req: Request, res: Response) {
 export async function getRestaurant(req: Request, res: Response) {
     try {
         const { name, category } = req.query;
-        const restaurants = await Restaurant.find({ name: name, category: category });
-        res.send(restaurants);
-    } catch (error: any) {
-        res.status(500).send({ error: error.message });
-    }
-}
+        const query = { ...(name && { name }), ...(category && { category }) };
 
-export async function getAllRestaurants(req: Request, res: Response) {
-    try {
-        const restaurants = await Restaurant.find();
+        const restaurants = await Restaurant.find(query);
         res.send(restaurants);
     } catch (error: any) {
         res.status(500).send({ error: error.message });
@@ -33,7 +26,29 @@ export async function getAllRestaurants(req: Request, res: Response) {
 
 export async function updateRestaurant(req: Request, res: Response) {
     try {
-        throw new Error('Sin implementar');
+        const { id } = req.params;
+
+        if (Object.keys(req.body).length === 0) {
+            return res.status(400).send('Body is empty');
+        }
+
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(404).send('Invalid restaurant ID');
+        }
+
+        const { name, address, category } = req.body;
+
+        const restaurant = await Restaurant.findByIdAndUpdate(
+            id,
+            { name, address, category },
+            { new: true }
+        );
+
+        if (!restaurant) {
+            return res.status(404).send('Restaurant not found');
+        }
+
+        res.send(restaurant);
     } catch (error: any) {
         res.status(500).send({ error: error.message });
     }
@@ -41,7 +56,23 @@ export async function updateRestaurant(req: Request, res: Response) {
 
 export async function deleteRestaurant(req: Request, res: Response) {
     try {
-        throw new Error('Sin implementar');
+        const { id } = req.params;
+
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(404).send('Invalid restaurant ID');
+        }
+
+        const restaurant = await Restaurant.findByIdAndUpdate(
+            id,
+            { status: false },
+            { new: true }
+        );
+
+        if (!restaurant) {
+            return res.status(404).send('Restaurant not found');
+        }
+
+        res.send(restaurant);
     } catch (error: any) {
         res.status(500).send({ error: error.message });
     }

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createRestaurant, getRestaurant, getAllRestaurants, updateRestaurant, deleteRestaurant } from '../controllers/restaurantController';
+import { createRestaurant, getRestaurant, updateRestaurant, deleteRestaurant } from '../controllers/restaurantController';
 import { Type, Static } from '@sinclair/typebox';
 import { validateRequest } from 'typebox-express-middleware';
 
@@ -19,9 +19,23 @@ router.post('/', validateRequest({
         address: Type.String(),
         category: Type.String(),
     }),
-}),createRestaurant);
+}), createRestaurant);
 
-router.patch('/:id', updateRestaurant);
-router.delete('/:id', deleteRestaurant);
+router.patch('/:id', validateRequest({
+    params: Type.Object({
+        id: Type.String(),
+    }),
+    body: Type.Partial(Type.Object({
+        name: Type.String(),
+        address: Type.String(),
+        category: Type.String(),
+    })),
+}), updateRestaurant);
+
+router.delete('/:id', validateRequest({
+    params: Type.Object({
+        id: Type.String(),
+    }),
+}), deleteRestaurant);
 
 export default router;

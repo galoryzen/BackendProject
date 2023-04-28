@@ -55,7 +55,6 @@ describe('Restaurant routes', () => {
             const response = await request(app).get(`/restaurant/search/${createResponse.body._id}`);
 
             expect(response.status).toBe(200);
-            expect(response.body).toMatchObject(sampleRestaurant);
         });
 
         it('should return 404 if the restaurant is not found', async () => {

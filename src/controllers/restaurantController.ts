@@ -1,6 +1,7 @@
 import { Restaurant } from '../models/restaurantModel';
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
+import { Product } from '../models/productModel';
 
 export async function createRestaurant(req: Request, res: Response) {
     try {
@@ -37,8 +38,13 @@ export async function getRestaurantById(req: Request, res: Response) {
         if (!restaurant) {
             return res.status(404).send('Restaurant not found');
         }
+        
+        const products = await Product.find({ restaurant: id });
 
-        res.send(restaurant);
+        res.send({
+          restaurant,
+          products,
+        });
     } catch (error: any) {
         res.status(500).send({ error: error.message });
     }

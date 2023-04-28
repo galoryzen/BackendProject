@@ -24,6 +24,26 @@ export async function getRestaurant(req: Request, res: Response) {
     }
 }
 
+export async function getRestaurantById(req: Request, res: Response) {
+    try {
+        const { id } = req.params;
+
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(404).send('Invalid restaurant ID');
+        }
+
+        const restaurant = await Restaurant.findById(id);
+
+        if (!restaurant) {
+            return res.status(404).send('Restaurant not found');
+        }
+
+        res.send(restaurant);
+    } catch (error: any) {
+        res.status(500).send({ error: error.message });
+    }
+}
+
 export async function updateRestaurant(req: Request, res: Response) {
     try {
         const { id } = req.params;

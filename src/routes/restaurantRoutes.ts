@@ -1,10 +1,16 @@
 import { Router } from 'express';
-import { createRestaurant, getRestaurant, updateRestaurant, deleteRestaurant } from '../controllers/restaurantController';
+import { createRestaurant, getRestaurant, getRestaurantById, updateRestaurant, deleteRestaurant } from '../controllers/restaurantController';
 import { Type, Static } from '@sinclair/typebox';
 import { validateRequest } from 'typebox-express-middleware';
 
 
 const router = Router();
+
+router.get('/search/:id', validateRequest({
+    params: Type.Object({
+        id: Type.String(),
+    }),
+}), getRestaurantById);
 
 router.get('/', validateRequest({
     query: Type.Optional(Type.Object({

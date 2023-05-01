@@ -51,9 +51,9 @@ beforeAll(async () => {
 
 describe('Order routes', () => {
 
-    // beforeEach(async () => {
-    //     await Order.deleteMany({});
-    // });
+    beforeEach(async () => {
+        await Order.deleteMany({});
+    });
 
     describe('POST /order', () => {
         it('should create a new order', async () => {

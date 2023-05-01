@@ -45,7 +45,7 @@ describe('Product routes', () => {
 
     describe('GET /product', () => {
         it('should get all products from a restaurant', async () => {
-            const response = await request(app).get('/product').query({ restaurant: restaurant._id });
+            const response = await request(app).get(`/product/restaurant/${restaurant._id}`);
 
             expect(response.status).toBe(200);
             expect(Array.isArray(response.body)).toBe(true);
@@ -53,7 +53,7 @@ describe('Product routes', () => {
         });
 
         it('should get products by restaurant and/or category', async () => {
-            const response = await request(app).get('/product').query({ restaurant: restaurant._id, category: restaurant.category });
+            const response = await request(app).get(`/product/restaurant/${restaurant._id}`).query({ category: restaurant.category });
 
             expect(response.status).toBe(200);
             expect(Array.isArray(response.body)).toBe(true);

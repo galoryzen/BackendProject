@@ -22,7 +22,11 @@ router.post('/', validateRequest({
         password: Type.String(),
         cellphone: Type.Number(),
         address: Type.String(),
-        role: Type.Optional(Type.String()),
+        role: Type.Optional(Type.Union([
+            Type.Literal('administrador de restaurante'),
+            Type.Literal('domiciliario'),
+            Type.Literal('cliente'),
+        ])),
     }),
 }), createUser);
 

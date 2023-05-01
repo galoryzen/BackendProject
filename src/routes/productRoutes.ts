@@ -1,5 +1,5 @@
 import express from 'express';
-import { createProduct, getProductById, getProducts, updateProduct, deleteProduct } from '../controllers/productController';
+import { createProduct, getProductById, getProducts, updateProduct, deleteProduct, getAllProducts } from '../controllers/productController';
 import { Type, Static } from '@sinclair/typebox';
 import { validateRequest } from 'typebox-express-middleware';
 
@@ -11,16 +11,21 @@ router.get('/search/:id', validateRequest({
     }),
 }), getProductById);
 
-router.get('/', validateRequest({
+router.get('/restaurant/:id', validateRequest({
     query: Type.Optional(Type.Object({
-        restaurant: Type.Optional(Type.String()),
         category: Type.Optional(Type.String()),
     })),
+    params: Type.Object({
+        id: Type.String(),
+    }),
 }), getProducts);
+
+router.get('/', getAllProducts);
 
 router.post('/', validateRequest({
     body: Type.Object({
         name: Type.String(),
+        description: Type.Optional(Type.String()),
         price: Type.Number(),
         restaurant: Type.String(),
         category: Type.String(),
@@ -34,6 +39,7 @@ router.patch('/:id', validateRequest({
     }),
     body: Type.Object({
         name: Type.Optional(Type.String()),
+        description: Type.Optional(Type.String()),
         price: Type.Optional(Type.Number()),
         restaurant: Type.Optional(Type.String()),
         category: Type.Optional(Type.String()),

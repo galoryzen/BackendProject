@@ -16,9 +16,37 @@ export async function createRestaurant(req: Request, res: Response) {
 export async function getRestaurant(req: Request, res: Response) {
     try {
         const { name, category } = req.query;
-        const query = { ...(name && { name }), ...(category && { category }) };
+        const query = {
+            ...(name && { name: { $regex: name, $options: 'i' } }),
+            ...(category && { category })
+        };
 
-        const restaurants = await Restaurant.find(query);
+        const restaurants = await Restaurant.aggregate([
+            {
+                $match: query
+            },
+            {
+                $lookup: {
+                    from: "orders",
+                    localField: "_id",
+                    foreignField: "restaurant",
+                    as: "orders"
+                }
+            },
+            {
+                $addFields: {
+                    popularity: {
+                        $size: "$orders"
+                    }
+                }
+            },
+            {
+                $sort: {
+                    popularity: -1
+                }
+            }
+        ]);
+
         res.send(restaurants);
     } catch (error: any) {
         res.status(500).send({ error: error.message });
@@ -38,12 +66,12 @@ export async function getRestaurantById(req: Request, res: Response) {
         if (!restaurant) {
             return res.status(404).send('Restaurant not found');
         }
-        
+
         const products = await Product.find({ restaurant: id });
 
         res.send({
-          restaurant,
-          products,
+            restaurant,
+            products,
         });
     } catch (error: any) {
         res.status(500).send({ error: error.message });

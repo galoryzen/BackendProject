@@ -10,7 +10,16 @@ beforeAll(async () => {
     await connectDB();
     await Product.deleteMany({});
 
-    restaurant = await request(app).get('/restaurant').then((res) => res.body[0]);
+    //create a restaurant for testing
+    const restaurantResponse = await request(app)
+        .post('/restaurant')
+        .send({
+            name: 'Test Restaurant Product',
+            address: 'Test Address',
+            category: 'Test Category',
+        });
+
+    restaurant = restaurantResponse.body;
 });
 
 describe('Product routes', () => {
@@ -35,8 +44,8 @@ describe('Product routes', () => {
     });
 
     describe('GET /product', () => {
-        it('should get all products', async () => {
-            const response = await request(app).get('/product');
+        it('should get all products from a restaurant', async () => {
+            const response = await request(app).get('/product').query({ restaurant: restaurant._id });
 
             expect(response.status).toBe(200);
             expect(Array.isArray(response.body)).toBe(true);

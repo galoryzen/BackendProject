@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 import userRoutes from './routes/userRoutes';
 import restaurantRoutes from './routes/restaurantRoutes';
 import productRoutes from './routes/productRoutes';
+import orderRoutes from './routes/orderRoutes';
 import { TypeboxError } from 'typebox-express-middleware';
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use('/user', userRoutes);
 app.use('/restaurant', restaurantRoutes);
 app.use('/product', productRoutes);
+app.use('/order', orderRoutes);
 
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'Hello World!' });

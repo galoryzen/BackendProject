@@ -1,6 +1,7 @@
 import { Product } from "../models/productModel";
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
+import { Restaurant } from "../models/restaurantModel";
 
 const createProduct = async (req: Request, res: Response) => {
     try {
@@ -18,7 +19,7 @@ const getProductById = async (req: Request, res: Response) => {
         const { id } = req.params;
 
         if (!mongoose.isValidObjectId(id)) {
-            return res.status(404).send('Invalid restaurant ID');
+            return res.status(404).send('Invalid product ID');
         }
 
         const product = await Product.findById(id);
@@ -33,11 +34,21 @@ const getProductById = async (req: Request, res: Response) => {
 };
 
 const getProducts = async (req: Request, res: Response) => {
-    const { restaurant, category } = req.query;
-    const query = { ...(restaurant && { restaurant }), ...(category && { category }) };
+    const { id } = req.params;
+    const { category } = req.query;
+
+    const restaurant = await Restaurant.findById(id);
+    if (!restaurant) {
+        return res.status(404).json({ error: "Restaurant not found" });
+    }
+
+    const query = { restaurant: restaurant._id, ...(category && { category }) };
 
     try {
-        const products = await Product.find(query).populate("restaurant");
+        const products = await Product.aggregate([
+            { $match: query },
+            { $group: { _id: "$category", products: { $push: "$$ROOT" } } }
+        ]);
         res.send(products);
     } catch (err) {
         console.error(err);
@@ -54,7 +65,7 @@ const updateProduct = async (req: Request, res: Response) => {
         }
 
         if (!mongoose.isValidObjectId(id)) {
-            return res.status(404).send('Invalid restaurant ID');
+            return res.status(404).send('Invalid product ID');
         }
 
         const product = await Product.findByIdAndUpdate(id, req.body, { new: true });
@@ -75,7 +86,7 @@ const deleteProduct = async (req: Request, res: Response) => {
         const { id } = req.params;
 
         if (!mongoose.isValidObjectId(id)) {
-            return res.status(404).send('Invalid restaurant ID');
+            return res.status(404).send('Invalid product ID');
         }
         const product = await Product.findByIdAndUpdate(id, { status: false }, { new: true });
         if (!product) {
@@ -88,4 +99,14 @@ const deleteProduct = async (req: Request, res: Response) => {
     }
 };
 
-export { createProduct, getProductById, getProducts, updateProduct, deleteProduct };
+const getAllProducts = async (req: Request, res: Response) => {
+    try {
+        const products = await Product.find();
+        res.send(products);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+};
+
+export { createProduct, getProductById, getProducts, updateProduct, deleteProduct, getAllProducts };

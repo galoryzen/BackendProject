@@ -9,7 +9,13 @@ const userSchema = new mongoose.Schema(
     cellphone: { type: Number, required: true },
     address: { type: String, required: true },
     status: { type: Boolean, default: true },
-    role: { type: String, required: true, default: 'user' }
+    role: { type: String, required: true, default: 'user' },
+    notifications: [
+      {
+        message: { type: String, required: true },
+        read: { type: Boolean, default: false },
+      },
+    ],
   },
   {
     timestamps: true,

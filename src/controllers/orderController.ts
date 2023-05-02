@@ -1,4 +1,5 @@
 import { Order } from "../models/orderModel";
+import { User } from "../models/userModel";
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
 
@@ -127,6 +128,15 @@ const updateOrderStatus = async (req: Request, res: Response) => {
 
         //Hacemos trigger del middleware de save
         await order.save();
+
+        //add a notification to the user
+        const user = await User.findById(order.user);
+        if(!user){
+            return res.status(404).send('User not found');
+        }
+
+        user.notifications.push({ message: `Tu orden ${order._id} ha sido ${deliveryStatus}`, read: false });
+        user.save();
 
         res.send(order);
     } catch (error: any) {
